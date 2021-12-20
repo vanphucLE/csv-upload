@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import Navbar from './Navbar';
 import { useDropzone } from 'react-dropzone';
-import { useAppContext } from './appContext';
 
 const TopWrapper = styled.div`
   display: flex;
@@ -35,11 +34,10 @@ const DropZone = styled.div`
   min-height: 300px;
 `;
 
-const UploadCsv = () => {
-  const { setCsvFile } = useAppContext();
+const UploadCsv = ({ uploadFile }) => {
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: ([file]) => {
-      setCsvFile(file);
+      uploadFile(file);
     },
     multiple: false,
     accept: '.csv',

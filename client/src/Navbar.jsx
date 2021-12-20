@@ -27,17 +27,17 @@ const StepNumber = styled(FlexWrapper)`
 `;
 
 const UploadCsv = () => {
-  const { csvFile } = useAppContext();
+  const { isUploading } = useAppContext();
 
   return (
     <FlexWrapper>
       <ContentWrapper>
         <FlexWrapper>
-          <StepNumber isActive={!csvFile}>1</StepNumber>
+          <StepNumber isActive={isUploading}>1</StepNumber>
           <div>Products</div>
         </FlexWrapper>
         <FlexWrapper>
-          <StepNumber isActive={!!csvFile}>2</StepNumber>
+          <StepNumber isActive={!isUploading}>2</StepNumber>
           <div>Results</div>
         </FlexWrapper>
       </ContentWrapper>
