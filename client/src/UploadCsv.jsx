@@ -2,6 +2,10 @@ import React from 'react';
 import styled from 'styled-components';
 import Navbar from './Navbar';
 import { useDropzone } from 'react-dropzone';
+import axios from 'axios';
+import Loading from './Loading';
+
+const API_URL = 'http://localhost:5000/upload';
 
 const TopWrapper = styled.div`
   display: flex;
@@ -14,6 +18,7 @@ const Button = styled.button`
   padding: 5px;
   background-color: white;
   border-radius: 4px;
+  cursor: pointer;
 `;
 
 const BottomWrapper = styled.div`
@@ -34,10 +39,34 @@ const DropZone = styled.div`
   min-height: 300px;
 `;
 
-const UploadCsv = ({ uploadFile }) => {
+const UploadCsv = ({ setResult }) => {
+  const [isLoading, setIsLoading] = React.useState();
+  const [csvFile, setCsvFile] = React.useState();
+
+  const uploadFile = () => {
+    if(!csvFile){
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', csvFile);
+
+    setIsLoading(true);
+    axios
+      .post(API_URL, formData)
+      .then((response) => {
+        setIsLoading(false);
+        setResult(response.data);
+      })
+      .catch((err) => {
+        setIsLoading(false);
+        console.log(err);
+      });
+  };
+
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: ([file]) => {
-      uploadFile(file);
+      setCsvFile(file);
     },
     multiple: false,
     accept: '.csv',
@@ -45,10 +74,11 @@ const UploadCsv = ({ uploadFile }) => {
 
   return (
     <div>
+      {isLoading && <Loading />}
       <TopWrapper>
-        <Button>Validate</Button>
+        <Button onClick={uploadFile} disabled={!csvFile}>Validate</Button>
       </TopWrapper>
-      <Navbar />
+      <Navbar isUploading />
       <BottomWrapper>
         <DropZone {...getRootProps()}>
           <input {...getInputProps()} />

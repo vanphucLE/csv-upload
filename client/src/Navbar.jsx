@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useAppContext } from './appContext';
 
 const FlexWrapper = styled.div`
   display: flex;
@@ -26,9 +25,7 @@ const StepNumber = styled(FlexWrapper)`
   background-color: ${(p) => p.isActive && `red; `};
 `;
 
-const UploadCsv = () => {
-  const { isUploading } = useAppContext();
-
+const UploadCsv = ({ isUploading }) => {
   return (
     <FlexWrapper>
       <ContentWrapper>
